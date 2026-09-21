@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 2 abgeschlossen, siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 3 abgeschlossen, siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -558,8 +558,15 @@ Optional: Screencast.
   Placement-Vergleich (source GEOMETRY, property "Placement"); Bounding-Box
   in Etappe 6. attribute_changes sind Dicts (keine vierte Klasse).
 
+- **Etappe 3**: `src/database.py` (Funktionen, keine Klasse: connect,
+  save_result, save_element_change, load_history, load_changes,
+  load_attribute_changes), `tests/test_database.py`. 14 Tests gruen.
+  Befund: numpy.int64 als sqlite3-Parameter liefert 0 Zeilen -> int().
+
 ### Naechster Schritt
 
-**Etappe 3 - SQLite** (Kap. 9, 12): `src/database.py` mit Schema aus Kap. 9,
-Speichern eines DiffResult, Historie lesen. `tests/test_database.py`.
-Vor dem Schreiben Aufbau skizzieren und abnicken lassen (Kap. 14, Punkt 3).
+**ZP1 am 26.10.** vorbereiten (Konzeptfolien, schriftliche Vorabgabe).
+Danach **Etappe 4 - Auswertung + Diagramme** (Kap. 12): `src/analytics.py`
+(Pivot je Geschoss/Klasse/Art), `src/charts.py` (gestapelte Balken je
+Geschoss, Top-10 geaenderte Properties). Vor dem Schreiben Aufbau skizzieren
+und abnicken lassen (Kap. 14, Punkt 3).

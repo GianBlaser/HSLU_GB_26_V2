@@ -114,3 +114,13 @@ Ground Truth aus Etappe 1: alle 8 Tests gruen, Datei-gegen-sich-selbst ergibt
 ```bash
 pytest 02_Semesterprojekt/tests
 ```
+
+### Etappe 3 - SQLite-Historie (21.09.2026)
+
+`src/database.py` legt die Datenbank `output/ifc_diff.db` mit den drei
+Tabellen `comparison`, `element_change` und `attribute_change` an, speichert
+ein `DiffResult` komplett (`save_result`) und liest Historie, Elemente eines
+Laufs und Attributdetails als DataFrames zurueck. Abnahme: zwei Laeufe
+gespeichert und wieder ausgelesen, 14 Tests gruen. Befund dabei: IDs aus
+einem DataFrame sind `numpy.int64`, die sqlite3 stillschweigend falsch bindet -
+die Lesefunktionen wandeln deshalb mit `int()` um (eigener Regressionstest).
