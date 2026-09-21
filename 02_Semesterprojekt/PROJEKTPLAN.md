@@ -3,10 +3,11 @@
 **Modul:** TA.BA_DT_PROGR - Digital Twin Programmieren, HS26
 **Modulverantwortlicher:** Michal Rontsinsky
 **Autor:** Gian Blaser
-**Repository:** https://github.com/GianBlaser/HSLU_GB_26 (muss PUBLIC sein)
+**Repository:** https://github.com/GianBlaser/HSLU_GB_26_V2 (muss PUBLIC sein)
+**Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2)
+**Stand:** 2026-09-21 (SW2) - Etappe 0 und 1 lokal abgeschlossen, siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -516,3 +517,47 @@ Optional: Screencast.
 8. Ich muss jede Zeile in der MEP erklaeren koennen. Lieber eine verstaendliche
    Schleife als ein cleverer Einzeiler.
 9. Bei Unklarheit fragen statt annehmen.
+
+---
+
+## 15. AKTUELLER STAND (fuer Fortsetzung in neuem Chat)
+
+**Datum:** 2026-09-21. Lokales Repo: `C:\HSLU_Programming\HSLU_GB_26`, Branch `main`.
+`origin` zeigt bereits auf das neue Repo `HSLU_GB_26_V2`. Das alte GitHub-Repo
+`HSLU_GB_26` wird nicht mehr angefasst.
+
+### Erledigt
+
+- **Etappe 0** (Commit `c412aca`): Remote ohne Token, `upstream` entfernt,
+  Branch `main`, Module installiert, `requirements.txt` eingefroren,
+  `.gitignore`, Ordnerstruktur, `src/config.py`, `smoke_test.py`,
+  README-Geruest, Testdaten in `data/`.
+  Befund: IfcOpenShell 0.8.5 laeuft mit Python 3.13 (Store) - **kein
+  Wechsel auf 3.12 noetig**. Kap. 0.4 ist damit erledigt.
+- **Etappe 1** (Commit `7bec972`): `tools/make_variant.py` + Ground Truth.
+  `data/Building-Architecture_B.ifc` und `_ground_truth.json` (Seed 42,
+  je 2x delete/move/modify/add) sind versioniert. Abnahme bestanden
+  (alle Aenderungen nachgewiesen, 9/9 Geometrien tesselierbar).
+  Verwendet `ifcopenshell.api` fuer `root.remove_product` und
+  `root.copy_class` - Begruendung im Modul-Docstring.
+
+### Offen / Befunde
+
+- **Push noch nicht erfolgt.** Beide Commits liegen nur lokal.
+  `credential.helper manager` ist global gesetzt; beim ersten
+  `git push -u origin main` muss der Browser-Login (GitHub-Konto GianBlaser)
+  durchlaufen werden. Danach auf github.com pruefen: Repo public, `myenv/`
+  nicht enthalten.
+- `stpyvista` 0.2.1 laesst sich ausserhalb einer laufenden Streamlit-App
+  nicht importieren (Components-v2-API). Relevanz erst in Etappe 7,
+  Fallback laut Kap. 13.
+- Die Test-IFC hat nur 20 IfcProduct / 13 IfcElement - fuer Entwicklung
+  ausreichend, Performance-Test spaeter mit `Infra-Landscaping.ifc`.
+
+### Naechster Schritt
+
+**Etappe 2 - Loader + Diff-Engine** (Kap. 12): `src/ifc_loader.py`
+(`IfcModel`), `src/diff_engine.py` (`ElementChange`, `DiffResult`),
+`tests/test_diff_engine.py` gegen `data/Building-Architecture_B_ground_truth.json`.
+Vergleichslogik nach Kap. 10. Vor dem Schreiben Aufbau skizzieren und
+abnicken lassen (Kap. 14, Punkt 3).
