@@ -575,12 +575,15 @@ Optional: Screencast.
   show_charts, show_export, show_history; Tabs Tabelle/Diagramme/Historie).
   Uploads landen in `output/uploads/`. Tag `v1.0-abgabefaehig`.
 
+- **ZP1-Unterlagen** erstellt: `docs/ZP1/DT_PROGR_HS26_ZP1_GianBlaser_Praesentation.pptx/.pdf`
+  (10 Folien, ausfuehrliche Form), `docs/ZP1/Sprechnotizen_ZP1.md` (3-Min-Skript,
+  Folien 1/2/4/8/10, Rueckfragen), Generator `docs/ZP1/build/build_slides.js`.
+  Offen: App-Screenshot einfuegen (optional), Abgabe ueber ILIAS bis 26.10.,
+  PyVista-Frage an Rontsinsky stellen.
+
 ### Naechster Schritt
 
-**ZP1 am 26.10.** vorbereiten (Konzeptfolien max. 3 Min, schriftliche
-Vorabgabe, Datei `DT_PROGR_HS26_ZP1_GianBlaser_Praesentation.pdf`); dort
-PyVista/stpyvista mit Rontsinsky abklaeren.
-Danach **Etappe 6 - Geometrie + Cache** (Kap. 11, 12): `src/geometry.py`
+ **Etappe 6 - Geometrie + Cache** (Kap. 11, 12): `src/geometry.py`
 (ifcopenshell.geom.iterator, USE_WORLD_COORDS, npz-Cache unter cache/<sha1>),
 Bounding-Box-Schwerpunkt/-Abmessungen/Dreiecksanzahl zurueck in die
 Diff-Engine als GEOMETRY-Quelle, `tests/test_geometry.py`.

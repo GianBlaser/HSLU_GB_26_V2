@@ -159,3 +159,9 @@ Detailansicht alt/neu, drei Diagramme, CSV-Download, Historie. Jeder
 Seitenbereich ist eine eigene Funktion; das Ergebnis liegt im
 `st.session_state`, damit es Filter- und Tab-Wechsel ueberlebt. Getestet im
 Browser, Git-Tag `v1.0-abgabefaehig`.
+
+### ZP1-Unterlagen (21.09.2026)
+
+`docs/ZP1/` enthaelt die Praesentation fuer die Zwischenpraesentation 1
+(PPTX + PDF, 10 Folien in ausfuehrlicher Form) und die Sprechnotizen fuer die
+3-Minuten-Kurzpraesentation.
