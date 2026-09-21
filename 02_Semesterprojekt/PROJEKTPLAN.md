@@ -543,11 +543,9 @@ Optional: Screencast.
 
 ### Offen / Befunde
 
-- **Push noch nicht erfolgt.** Beide Commits liegen nur lokal.
-  `credential.helper manager` ist global gesetzt; beim ersten
-  `git push -u origin main` muss der Browser-Login (GitHub-Konto GianBlaser)
-  durchlaufen werden. Danach auf github.com pruefen: Repo public, `myenv/`
-  nicht enthalten.
+- **Push erfolgt** (Commit `cb34cb9`, Merge mit dem Initial commit von
+  HSLU_GB_26_V2). `credential.helper manager` ist global gesetzt, Push
+  funktioniert. Noch pruefen: Repo `HSLU_GB_26_V2` auf github.com public?
 - `stpyvista` 0.2.1 laesst sich ausserhalb einer laufenden Streamlit-App
   nicht importieren (Components-v2-API). Relevanz erst in Etappe 7,
   Fallback laut Kap. 13.
