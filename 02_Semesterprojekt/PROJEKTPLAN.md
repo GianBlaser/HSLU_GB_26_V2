@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 4 abgeschlossen, siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 5 abgeschlossen (v1.0-abgabefaehig), siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -570,10 +570,18 @@ Optional: Screencast.
   (plot_stacked_bars, plot_changes_by_storey/class, plot_top_properties,
   save_figure; Backend Agg), `tests/test_analytics.py`. 20 Tests gruen.
 
+- **Etappe 5**: `app.py` vollstaendig (select_file mit Upload, run_comparison,
+  show_kpis, show_filters, show_table mit on_select, show_details,
+  show_charts, show_export, show_history; Tabs Tabelle/Diagramme/Historie).
+  Uploads landen in `output/uploads/`. Tag `v1.0-abgabefaehig`.
+
 ### Naechster Schritt
 
-**Etappe 5 - Streamlit-UI ohne 3D** (Kap. 12): app.py ausbauen - Upload
-eigener IFCs, Filter (IfcClass/Geschoss/Art) via analytics.filter_changes,
-Detailansicht alt/neu je Element (database.load_attribute_changes bzw.
-ElementChange.attribute_changes), Diagramme (st.pyplot), CSV-Export.
-Danach Git-Tag `v1.0-abgabefaehig`. **ZP1 am 26.10.** nicht vergessen.
+**ZP1 am 26.10.** vorbereiten (Konzeptfolien max. 3 Min, schriftliche
+Vorabgabe, Datei `DT_PROGR_HS26_ZP1_GianBlaser_Praesentation.pdf`); dort
+PyVista/stpyvista mit Rontsinsky abklaeren.
+Danach **Etappe 6 - Geometrie + Cache** (Kap. 11, 12): `src/geometry.py`
+(ifcopenshell.geom.iterator, USE_WORLD_COORDS, npz-Cache unter cache/<sha1>),
+Bounding-Box-Schwerpunkt/-Abmessungen/Dreiecksanzahl zurueck in die
+Diff-Engine als GEOMETRY-Quelle, `tests/test_geometry.py`.
+Vor dem Schreiben Aufbau skizzieren und abnicken lassen (Kap. 14, Punkt 3).

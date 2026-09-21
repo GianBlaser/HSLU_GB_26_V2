@@ -54,9 +54,18 @@ pip install -r requirements.txt
 # Smoke-Test (Etappe 0)
 python 02_Semesterprojekt/smoke_test.py
 
-# Anwendung (ab Etappe 5)
+# Anwendung
 streamlit run 02_Semesterprojekt/app.py
+
+# Tests
+pytest 02_Semesterprojekt/tests
 ```
+
+In der Anwendung: Stand A und Stand B waehlen (aus `data/` oder per Upload),
+**Vergleichen** klicken. Danach Kennzahlen, Tab *Tabelle* (Filter nach
+IfcClass / Geschoss / Aenderungsart, Zeile anklicken fuer die Detailansicht
+alt/neu, CSV-Export), Tab *Diagramme*, Tab *Historie* (alle bisherigen Laeufe
+aus SQLite).
 
 ## Projektstruktur
 
@@ -140,3 +149,13 @@ haeufigsten geaenderten Properties, kombinierbarer Filter fuer die UI.
 `src/charts.py` zeichnet daraus mit Matplotlib gestapelte Balken (Farben aus
 `config.py`) und ein Balkendiagramm der Top-Properties; `save_figure` schreibt
 PNGs. Abnahme: drei PNGs in `output/` erzeugt und plausibel, 20 Tests gruen.
+
+### Etappe 5 - Streamlit-UI ohne 3D (21.09.2026) - Abgabe-Meilenstein
+
+`app.py` ist die vollstaendige Oberflaeche ohne 3D: Upload oder Auswahl aus
+`data/`, Vergleich mit Speicherung in SQLite, Kennzahlen, Filter (IfcClass,
+Geschoss, Aenderungsart, nur Aenderungen), Tabelle mit Zeilenauswahl und
+Detailansicht alt/neu, drei Diagramme, CSV-Download, Historie. Jeder
+Seitenbereich ist eine eigene Funktion; das Ergebnis liegt im
+`st.session_state`, damit es Filter- und Tab-Wechsel ueberlebt. Getestet im
+Browser, Git-Tag `v1.0-abgabefaehig`.
