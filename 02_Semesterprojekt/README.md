@@ -66,7 +66,7 @@ streamlit run 02_Semesterprojekt/app.py
 ├── PROJEKTPLAN.md     Etappenplan
 ├── app.py             Hauptskript (Streamlit)
 ├── src/               Module (config, ifc_loader, diff_engine, ...)
-├── tools/             Testdaten-Generator
+├── tools/             Testdaten-Generator (make_variant.py)
 ├── tests/             pytest-Tests
 ├── docs/              Architekturdiagramm, Screenshots
 ├── data/              kleine Test-IFCs (versioniert)
@@ -86,3 +86,17 @@ liest `data/Building-Architecture.ifc` (IFC4, 20 IfcProduct-Elemente).
 Offen: `stpyvista` laesst sich ausserhalb einer laufenden Streamlit-App
 nicht importieren - Relevanz wird in Etappe 7 geprueft (Fallback laut Plan:
 PyVista im eigenen Fenster).
+
+### Etappe 1 - Testdaten-Generator (21.09.2026)
+
+`tools/make_variant.py` erzeugt aus einer IFC-Datei reproduzierbar (Seed) einen
+Stand B: Bauteile werden geloescht, verschoben, umbenannt inkl. Mengenwert
+geaendert oder mit neuer GlobalId dupliziert. Die gemachten Aenderungen landen
+in einer `*_ground_truth.json`, gegen die die Diff-Engine ab Etappe 2 getestet
+wird. `data/Building-Architecture_B.ifc` (Seed 42, je 2 Aenderungen pro Art)
+ist versioniert; Kontrolle: alle 9 Bauteile mit Geometrie lassen sich mit
+`ifcopenshell.geom` tesselieren, Kopien haengen korrekt im Geschoss/Site.
+
+```bash
+python 02_Semesterprojekt/tools/make_variant.py 02_Semesterprojekt/data/Building-Architecture.ifc --seed 42
+```

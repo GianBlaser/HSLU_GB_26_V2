@@ -1,0 +1,95 @@
+{
+  "deleted": [
+    {
+      "guid": "3wdauVJT5Fx9drrREiDqA$",
+      "ifc_class": "IfcWall",
+      "name": "house - outer wall - house right back"
+    },
+    {
+      "guid": "2F44QMqSH3TOkM$SZoqCBe",
+      "ifc_class": "IfcBuildingElementProxy",
+      "name": "origin"
+    }
+  ],
+  "moved": [
+    {
+      "guid": "12UVOn4wvAJPMUExKdZLb8",
+      "name": "house - roof - slab right",
+      "from": [
+        2100.0,
+        0.0,
+        3475.736
+      ],
+      "to": [
+        3100.0,
+        500.0,
+        3475.736
+      ]
+    },
+    {
+      "guid": "3Fbgsvr8nAYfGs9y5keub0",
+      "name": "house - chimney",
+      "from": [
+        4700.0,
+        5300.0,
+        0.0
+      ],
+      "to": [
+        5700.0,
+        5800.0,
+        0.0
+      ]
+    }
+  ],
+  "modified": [
+    {
+      "guid": "0OfZwWc8j9QP5uX8xPTxDH",
+      "changes": [
+        {
+          "source": "ATTRIBUTE",
+          "property": "Name",
+          "old": "house - outer wall - house left",
+          "new": "house - outer wall - house left (rev B)"
+        },
+        {
+          "source": "PSET",
+          "property": "NetVolume",
+          "old": 4.230883117545889,
+          "new": 4.653971429300478
+        }
+      ]
+    },
+    {
+      "guid": "1AQAupaRP1txwK1AGiN61V",
+      "changes": [
+        {
+          "source": "ATTRIBUTE",
+          "property": "Name",
+          "old": "house - outer wall - house right front",
+          "new": "house - outer wall - house right front (rev B)"
+        },
+        {
+          "source": "PSET",
+          "property": "NetVolume",
+          "old": 1.2692649352635803,
+          "new": 1.3961914287899384
+        }
+      ]
+    }
+  ],
+  "added": [
+    {
+      "guid": "3i6vcGDvT2BwOYwtIvvCn1",
+      "copied_from": "3_4VN63S96DfWiJjgG8j1C",
+      "name": "sand bedding (Kopie)"
+    },
+    {
+      "guid": "2olfjbo252t9KRgmfTn3H9",
+      "copied_from": "0Q5LjisRjDwhFSOc_WQjlF",
+      "name": "plumbing wall (Kopie)"
+    }
+  ],
+  "source": "Building-Architecture.ifc",
+  "variant": "Building-Architecture_B.ifc",
+  "seed": 42
+}
