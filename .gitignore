@@ -1,1 +1,7 @@
 myenv/
+__pycache__/
+*.pyc
+*.db
+02_Semesterprojekt/cache/
+02_Semesterprojekt/output/
+.streamlit/secrets.toml

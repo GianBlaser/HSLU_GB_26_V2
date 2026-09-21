@@ -1,0 +1,88 @@
+# IFC-Diff Viewer ("ModellWandel")
+
+Vergleicht zwei Staende desselben IFC-Modells und zeigt die Unterschiede
+tabellarisch, statistisch und im 3D-Viewer farbcodiert an.
+
+## Kontext
+
+Semesterprojekt im Modul **TA.BA_DT_PROGR - Digital Twin Programmieren**,
+Hochschule Luzern, HS26. Autor: Gian Blaser.
+Themenfeld gemaess Merkblatt: Datenauswertung und Daten-Visualisierung.
+
+## Zielsetzung
+
+"Was hat sich seit dem letzten Modellstand geaendert?" ist in der
+BIM-Koordination eine taegliche Frage, die von Hand kaum beantwortbar ist.
+Das Programm
+
+1. laedt zwei IFC-Dateien (Stand A = alt, Stand B = neu),
+2. vergleicht die Elemente ueber ihre `GlobalId` und klassiert sie als
+   `ADDED`, `DELETED`, `MODIFIED` oder `UNCHANGED`,
+3. speichert jeden Vergleichslauf in SQLite,
+4. wertet die Aenderungen mit Pandas aus (je Geschoss, je IfcClass, je Art),
+5. zeichnet Diagramme mit Matplotlib,
+6. zeigt die Aenderungen im 3D-Viewer (geaendert = opak farbig, Kontext transparent),
+7. exportiert CSV und PDF-Report.
+
+## Entwicklungsumgebung
+
+| Werkzeug | Version / Bemerkung |
+|---|---|
+| Python | 3.13 (venv `myenv/` im Repo-Root) |
+| IfcOpenShell | 0.8.5 - IFC lesen, Geometrie |
+| Pandas | 3.0 - Auswertung |
+| Matplotlib | 3.11 - Diagramme |
+| SQLite | Standardbibliothek - Historie |
+| Streamlit | 1.64 - Benutzeroberflaeche |
+| PyVista / stpyvista | 0.49 / 0.2.1 - 3D-Viewer |
+| pytest | Tests |
+| Git / GitHub | Versionierung, Repo ist public |
+
+## Installation
+
+```bash
+git clone https://github.com/GianBlaser/HSLU_GB_26.git
+cd HSLU_GB_26
+python -m venv myenv
+myenv\Scripts\activate
+pip install -r requirements.txt
+```
+
+## Nutzung
+
+```bash
+# Smoke-Test (Etappe 0)
+python 02_Semesterprojekt/smoke_test.py
+
+# Anwendung (ab Etappe 5)
+streamlit run 02_Semesterprojekt/app.py
+```
+
+## Projektstruktur
+
+```
+02_Semesterprojekt/
+├── README.md          Projekt-Dokumentation
+├── PROJEKTPLAN.md     Etappenplan
+├── app.py             Hauptskript (Streamlit)
+├── src/               Module (config, ifc_loader, diff_engine, ...)
+├── tools/             Testdaten-Generator
+├── tests/             pytest-Tests
+├── docs/              Architekturdiagramm, Screenshots
+├── data/              kleine Test-IFCs (versioniert)
+├── cache/             Geometrie-Cache (nicht versioniert)
+└── output/            Datenbank, Exporte (nicht versioniert)
+```
+
+## Stand der Entwicklung
+
+### Etappe 0 - Projektgeruest (21.09.2026)
+
+Repository bereinigt (Remote ohne Token, Arbeit auf `main`), Module
+installiert und in `requirements.txt` eingefroren. IfcOpenShell 0.8.5 laeuft
+mit Python 3.13, ein Wechsel auf 3.12 war nicht noetig. Ordnerstruktur,
+`config.py` (Farben, Toleranzen, Pfade) und Smoke-Test stehen; der Test
+liest `data/Building-Architecture.ifc` (IFC4, 20 IfcProduct-Elemente).
+Offen: `stpyvista` laesst sich ausserhalb einer laufenden Streamlit-App
+nicht importieren - Relevanz wird in Etappe 7 geprueft (Fallback laut Plan:
+PyVista im eigenen Fenster).
