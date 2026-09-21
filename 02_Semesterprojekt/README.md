@@ -100,3 +100,17 @@ ist versioniert; Kontrolle: alle 9 Bauteile mit Geometrie lassen sich mit
 ```bash
 python 02_Semesterprojekt/tools/make_variant.py 02_Semesterprojekt/data/Building-Architecture.ifc --seed 42
 ```
+
+### Etappe 2 - Loader und Diff-Engine (21.09.2026)
+
+`src/ifc_loader.py` kapselt eine IFC-Datei als `IfcModel` mit einem
+GUID-Dict fuer schnelles Matching. `src/diff_engine.py` vergleicht zwei
+Staende auf drei Ebenen (Direktattribute, Property Sets mit Zahlentoleranz,
+Einfuegekoordinaten) und liefert ein `DiffResult` mit `ElementChange`-Liste,
+Kennzahlen und DataFrame. `tests/test_diff_engine.py` prueft gegen die
+Ground Truth aus Etappe 1: alle 8 Tests gruen, Datei-gegen-sich-selbst ergibt
+0 Aenderungen. Bounding-Box-Vergleich folgt in Etappe 6.
+
+```bash
+pytest 02_Semesterprojekt/tests
+```

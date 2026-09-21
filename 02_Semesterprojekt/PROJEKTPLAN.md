@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappe 0 und 1 lokal abgeschlossen, siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 2 abgeschlossen, siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -552,10 +552,14 @@ Optional: Screencast.
 - Die Test-IFC hat nur 20 IfcProduct / 13 IfcElement - fuer Entwicklung
   ausreichend, Performance-Test spaeter mit `Infra-Landscaping.ifc`.
 
+- **Etappe 2**: `src/ifc_loader.py` (`IfcModel`), `src/diff_engine.py`
+  (`ElementChange`, `DiffResult`, `compare_models`), `tests/test_diff_engine.py`
+  + `tests/conftest.py`. 8 Tests gruen. Geometrie-Ebene vorerst nur als
+  Placement-Vergleich (source GEOMETRY, property "Placement"); Bounding-Box
+  in Etappe 6. attribute_changes sind Dicts (keine vierte Klasse).
+
 ### Naechster Schritt
 
-**Etappe 2 - Loader + Diff-Engine** (Kap. 12): `src/ifc_loader.py`
-(`IfcModel`), `src/diff_engine.py` (`ElementChange`, `DiffResult`),
-`tests/test_diff_engine.py` gegen `data/Building-Architecture_B_ground_truth.json`.
-Vergleichslogik nach Kap. 10. Vor dem Schreiben Aufbau skizzieren und
-abnicken lassen (Kap. 14, Punkt 3).
+**Etappe 3 - SQLite** (Kap. 9, 12): `src/database.py` mit Schema aus Kap. 9,
+Speichern eines DiffResult, Historie lesen. `tests/test_database.py`.
+Vor dem Schreiben Aufbau skizzieren und abnicken lassen (Kap. 14, Punkt 3).
