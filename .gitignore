@@ -5,3 +5,4 @@ __pycache__/
 02_Semesterprojekt/cache/
 02_Semesterprojekt/output/
 .streamlit/secrets.toml
+.claude/

@@ -124,3 +124,10 @@ Laufs und Attributdetails als DataFrames zurueck. Abnahme: zwei Laeufe
 gespeichert und wieder ausgelesen, 14 Tests gruen. Befund dabei: IDs aus
 einem DataFrame sind `numpy.int64`, die sqlite3 stillschweigend falsch bindet -
 die Lesefunktionen wandeln deshalb mit `int()` um (eigener Regressionstest).
+
+### Vorabversion Streamlit-UI (21.09.2026)
+
+`app.py` als Minimalversion (Dateiauswahl A/B aus `data/`, Button
+"Vergleichen", Kennzahlen, Tabelle, Speicherung in SQLite, Historie), damit die
+Kette Loader -> Diff -> DB im Browser testbar ist. Wird in Etappe 5 zur
+vollstaendigen UI ausgebaut.
