@@ -131,3 +131,12 @@ die Lesefunktionen wandeln deshalb mit `int()` um (eigener Regressionstest).
 "Vergleichen", Kennzahlen, Tabelle, Speicherung in SQLite, Historie), damit die
 Kette Loader -> Diff -> DB im Browser testbar ist. Wird in Etappe 5 zur
 vollstaendigen UI ausgebaut.
+
+### Etappe 4 - Auswertung und Diagramme (21.09.2026)
+
+`src/analytics.py` wertet die Vergleichstabelle mit Pandas aus: Pivot der
+Aenderungen je Geschoss und je IfcClass (`pd.crosstab`), Top-10 der am
+haeufigsten geaenderten Properties, kombinierbarer Filter fuer die UI.
+`src/charts.py` zeichnet daraus mit Matplotlib gestapelte Balken (Farben aus
+`config.py`) und ein Balkendiagramm der Top-Properties; `save_figure` schreibt
+PNGs. Abnahme: drei PNGs in `output/` erzeugt und plausibel, 20 Tests gruen.

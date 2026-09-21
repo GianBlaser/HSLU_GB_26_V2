@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 3 abgeschlossen, siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 4 abgeschlossen, siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -563,10 +563,17 @@ Optional: Screencast.
   load_attribute_changes), `tests/test_database.py`. 14 Tests gruen.
   Befund: numpy.int64 als sqlite3-Parameter liefert 0 Zeilen -> int().
 
+- **Minimal-app.py** (vorgezogen aus Etappe 5): Auswahl A/B, Vergleichen,
+  KPIs, Tabelle, Historie. Laeuft, im Browser getestet.
+- **Etappe 4**: `src/analytics.py` (only_changes, pivot_by, changes_by_storey,
+  changes_by_class, top_changed_properties, filter_changes), `src/charts.py`
+  (plot_stacked_bars, plot_changes_by_storey/class, plot_top_properties,
+  save_figure; Backend Agg), `tests/test_analytics.py`. 20 Tests gruen.
+
 ### Naechster Schritt
 
-**ZP1 am 26.10.** vorbereiten (Konzeptfolien, schriftliche Vorabgabe).
-Danach **Etappe 4 - Auswertung + Diagramme** (Kap. 12): `src/analytics.py`
-(Pivot je Geschoss/Klasse/Art), `src/charts.py` (gestapelte Balken je
-Geschoss, Top-10 geaenderte Properties). Vor dem Schreiben Aufbau skizzieren
-und abnicken lassen (Kap. 14, Punkt 3).
+**Etappe 5 - Streamlit-UI ohne 3D** (Kap. 12): app.py ausbauen - Upload
+eigener IFCs, Filter (IfcClass/Geschoss/Art) via analytics.filter_changes,
+Detailansicht alt/neu je Element (database.load_attribute_changes bzw.
+ElementChange.attribute_changes), Diagramme (st.pyplot), CSV-Export.
+Danach Git-Tag `v1.0-abgabefaehig`. **ZP1 am 26.10.** nicht vergessen.
