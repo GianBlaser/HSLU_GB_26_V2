@@ -42,7 +42,7 @@ Das Programm
 
 ```bash
 git clone https://github.com/GianBlaser/HSLU_GB_26_V2.git
-cd HSLU_GB_26
+cd HSLU_GB_26_V2
 python -m venv myenv
 myenv\Scripts\activate
 pip install -r requirements.txt
