@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 6 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 7 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -581,10 +581,27 @@ Optional: Screencast.
   Offen: App-Screenshot einfuegen (optional), Abgabe ueber ILIAS bis 26.10.,
   PyVista-Frage an Rontsinsky stellen.
 
+- **Etappe 6**: `src/geometry.py` (file_hash, cache_path, create_meshes,
+  save_cache, load_cache, load_meshes, mesh_summary), `IfcModel.load_geometry()`
+  + `get_geometry_summary()`, `diff_engine.compare_geometry()` (center, size,
+  n_triangles als GEOMETRY-Quelle), Haekchen in app.py, `tests/test_geometry.py`.
+  Meshes: verts float32 (n,3), faces int32 (m,3), Meter, Weltkoordinaten,
+  npz-Schluessel "guid|verts" (GUIDs koennen auf _ enden). Cache-Faktor ~30.
+
+- **Etappe 7**: `src/viewer.py` (make_polydata, collect_meshes, add_group,
+  build_plotter, focus_on_changes, render_image), CONTEXT_*/VIEWER_* in
+  config.py, Tab "3D-Ansicht" in app.py (Kontext-Radio, Filterkopplung,
+  Render-Cache im Session-State), `tests/test_viewer.py`. 31 Tests gruen.
+  Offscreen-Rendering als Bild - **kein stpyvista noetig**. Interaktive
+  Einbettung bleibt optional, falls Rontsinsky PyVista freigibt.
+  Befund: copy_class kopiert Representation nicht -> make_variant teilt sie,
+  Testdaten B neu erzeugt (neue GUIDs in ground_truth.json).
+  Hinweis: nach Aenderungen in src/ Streamlit neu starten (kein Hot-Reload).
+
 ### Naechster Schritt
 
- **Etappe 6 - Geometrie + Cache** (Kap. 11, 12): `src/geometry.py`
-(ifcopenshell.geom.iterator, USE_WORLD_COORDS, npz-Cache unter cache/<sha1>),
-Bounding-Box-Schwerpunkt/-Abmessungen/Dreiecksanzahl zurueck in die
-Diff-Engine als GEOMETRY-Quelle, `tests/test_geometry.py`.
-Vor dem Schreiben Aufbau skizzieren und abnicken lassen (Kap. 14, Punkt 3).
+**Etappe 8 - Interaktion + Report** (optional, Kap. 12): Zeilen-Klick in der
+Tabelle -> Kamera auf das Element (Viewer mit nur diesem Mesh + Kontext),
+`src/report.py` (PDF mit KPIs, Diagrammen, Tabelle; matplotlib PdfPages,
+kein neues Modul). Danach **Etappe 9 - Doku + Praesentation** (README final,
+Architekturdiagramm, Screenshots, ZP2-Folien via docs/ZP1/build/build_slides.js).
