@@ -176,3 +176,19 @@ Abmessungen (Toleranz 1 mm) und Dreiecksanzahl. In der App ist "Geometrie
 vergleichen" ein Haekchen. Abnahme mit `Infra-Landscaping.ifc` (2.3 MB,
 101 Meshes): 0.88 s ohne, 0.03 s mit Cache. 26 Tests gruen. Befund: GUIDs
 koennen auf `_` enden, deshalb `|` als Trennzeichen in den npz-Schluesseln.
+
+### Etappe 7 - 3D-Viewer (22.09.2026)
+
+`src/viewer.py` baut mit PyVista eine Szene aus den gecachten Meshes:
+hinzugefuegt gruen, geloescht rot (aus Stand A), geaendert orange, der
+unveraenderte Kontext wahlweise transparent, nur Kanten oder ausgeblendet.
+Die Kamera richtet sich isometrisch auf die geaenderten Elemente. Gerendert
+wird offscreen in ein Bild (`st.image`) - das braucht kein `stpyvista` und
+laeuft ueberall. In der App: Tab "3D-Ansicht" mit Kontext-Umschalter und
+Kopplung an die Tabellenfilter. 31 Tests gruen.
+
+![3D-Ansicht](docs/screenshots/viewer_transparent.png)
+
+Befund: `ifcopenshell.api root.copy_class` uebernimmt die `Representation`
+nicht - der Testdaten-Generator teilt sie deshalb explizit mit dem Original,
+Testdaten neu erzeugt.

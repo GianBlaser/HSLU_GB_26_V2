@@ -1,4 +1,4 @@
-"""IFC-Diff Viewer - Streamlit-Oberflaeche (Etappe 5, ohne 3D).
+"""IFC-Diff Viewer - Streamlit-Oberflaeche.
 
 Start aus dem Repo-Root mit aktivierter venv:
     streamlit run 02_Semesterprojekt/app.py
@@ -21,10 +21,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from src.analytics import (changes_by_class, changes_by_storey, filter_changes,  # noqa: E402
                            top_changed_properties)
 from src.charts import plot_changes_by_class, plot_changes_by_storey, plot_top_properties  # noqa: E402
-from src.config import ADDED, DATA_DIR, DELETED, MODIFIED, OUTPUT_DIR, UNCHANGED  # noqa: E402
+from src.config import (ADDED, CONTEXT_MODES, DATA_DIR, DELETED, MODIFIED, OUTPUT_DIR,  # noqa: E402
+                        UNCHANGED)
 from src.database import connect, load_history, save_result  # noqa: E402
 from src.diff_engine import DiffResult, compare_models  # noqa: E402
 from src.ifc_loader import IfcModel  # noqa: E402
+from src.viewer import render_image  # noqa: E402
 
 UPLOAD_DIR = OUTPUT_DIR / "uploads"
 ALL = "(alle)"
@@ -65,6 +67,9 @@ def run_comparison(path_a: Path, path_b: Path, with_geometry: bool) -> None:
         comparison_id = save_result(connect(), result)
     st.session_state["result"] = result
     st.session_state["comparison_id"] = comparison_id
+    # Modelle behalten: der 3D-Viewer braucht die Meshes
+    st.session_state["models"] = (model_a, model_b) if with_geometry else None
+    st.session_state.pop("render", None)
 
 
 # --- Ergebnisdarstellung -----------------------------------------------------
@@ -144,6 +149,28 @@ def show_export(df: pd.DataFrame, comparison_id: int) -> None:
                        mime="text/csv")
 
 
+def show_viewer(result: DiffResult, filtered: pd.DataFrame) -> None:
+    """3D-Ansicht: geaenderte Elemente farbig, Kontext waehlbar, Filter aus der Tabelle."""
+    models = st.session_state.get("models")
+    if models is None:
+        st.info("Fuer die 3D-Ansicht beim Vergleich das Haekchen 'Geometrie vergleichen' setzen.")
+        return
+    left, right = st.columns([1, 3])
+    context_mode = left.radio("Unveraenderte Elemente", CONTEXT_MODES)
+    use_filter = left.checkbox("Nur gefilterte Elemente (Tab Tabelle)", value=False)
+    guids = set(filtered["global_id"]) if use_filter else {c.global_id for c in result.changes}
+
+    # Nur neu rendern, wenn sich Kontext oder Auswahl geaendert haben
+    key = (context_mode, frozenset(guids))
+    cached = st.session_state.get("render")
+    if cached is None or cached[0] != key:
+        with st.spinner("Rendern ..."):
+            image = render_image(result, models[0], models[1], guids, context_mode)
+        st.session_state["render"] = (key, image)
+    right.image(st.session_state["render"][1], use_container_width=True)
+    left.caption("DELETED aus Stand A, alle anderen aus Stand B. Ansicht isometrisch auf die Aenderungen.")
+
+
 def show_history() -> None:
     """Alle bisherigen Laeufe aus SQLite."""
     st.dataframe(load_history(connect()), use_container_width=True, hide_index=True)
@@ -181,13 +208,15 @@ def main() -> None:
     show_kpis(result)
 
     df = result.to_dataframe()
-    tab_table, tab_charts, tab_history = st.tabs(["Tabelle", "Diagramme", "Historie"])
+    tab_table, tab_viewer, tab_charts, tab_history = st.tabs(["Tabelle", "3D-Ansicht", "Diagramme", "Historie"])
     with tab_table:
         filtered = show_filters(df)
         selected_guid = show_table(filtered)
         show_export(filtered, comparison_id)
         if selected_guid:
             show_details(result, selected_guid)
+    with tab_viewer:
+        show_viewer(result, filtered)
     with tab_charts:
         show_charts(result, df)
     with tab_history:

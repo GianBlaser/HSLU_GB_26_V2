@@ -53,3 +53,12 @@ EXCLUDED_ATTRIBUTES = ["GlobalId", "OwnerHistory", "id"]
 # --- Performance -------------------------------------------------------------
 # Ab dieser Elementanzahl warnt die UI und bietet "nur Aenderungen rendern" an
 MAX_ELEMENTS_FULL_RENDER = 20_000
+
+# --- 3D-Viewer ---------------------------------------------------------------
+# Darstellung der unveraenderten Elemente (Kontext)
+CONTEXT_OFF = "aus"
+CONTEXT_TRANSPARENT = "transparent"
+CONTEXT_EDGES = "nur Kanten"
+CONTEXT_MODES = [CONTEXT_TRANSPARENT, CONTEXT_EDGES, CONTEXT_OFF]
+VIEWER_SIZE = (1100, 650)          # Pixel (Breite, Hoehe) des gerenderten Bildes
+VIEWER_BACKGROUND = "#FFFFFF"

@@ -89,6 +89,9 @@ def duplicate_element(model: ifcopenshell.file, element) -> dict:
     """Kopiert ein Element mit neuer GlobalId und versetzt die Kopie."""
     copy = ifcopenshell.api.run("root.copy_class", model, product=element)
     copy.Name = f"{element.Name} (Kopie)"
+    # copy_class uebernimmt die Geometrie nicht; die Kopie teilt sich die
+    # Representation mit dem Original (im IFC-Schema erlaubt) und wird nur versetzt
+    copy.Representation = element.Representation
     move_element(copy, COPY_OFFSET)
     return {"guid": copy.GlobalId, "copied_from": element.GlobalId, "name": copy.Name}
 
