@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 5 abgeschlossen (v1.0-abgabefaehig), siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 6 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,

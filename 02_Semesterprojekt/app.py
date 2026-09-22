@@ -53,10 +53,15 @@ def select_file(label: str, default_index: int) -> Path:
     return DATA_DIR / name
 
 
-def run_comparison(path_a: Path, path_b: Path) -> None:
+def run_comparison(path_a: Path, path_b: Path, with_geometry: bool) -> None:
     """Vergleicht zwei Dateien, speichert in SQLite und im Session-State."""
     with st.spinner("Modelle laden und vergleichen ..."):
-        result = compare_models(IfcModel(path_a), IfcModel(path_b))
+        model_a, model_b = IfcModel(path_a), IfcModel(path_b)
+        if with_geometry:
+            # Erster Aufruf tesselliert und cacht, danach kommt alles aus cache/
+            model_a.load_geometry()
+            model_b.load_geometry()
+        result = compare_models(model_a, model_b)
         comparison_id = save_result(connect(), result)
     st.session_state["result"] = result
     st.session_state["comparison_id"] = comparison_id
@@ -158,8 +163,10 @@ def main() -> None:
     with column_b:
         path_b = select_file("Stand B (neu)", 1)
 
+    with_geometry = st.checkbox("Geometrie vergleichen (Bounding-Box, Dreiecksanzahl) - erster Lauf dauert laenger",
+                                value=True)
     if st.button("Vergleichen", type="primary"):
-        run_comparison(path_a, path_b)
+        run_comparison(path_a, path_b, with_geometry)
 
     result = st.session_state.get("result")
     if result is None:

@@ -3,8 +3,9 @@
 Vergleichslogik nach Projektplan Kap. 10:
 1. Direkte Attribute (Name, Description, ObjectType, Tag, PredefinedType)
 2. Property Sets, Zahlen mit Toleranz
-3. Geometrie - in dieser Etappe nur die Einfuegekoordinaten (Placement);
-   Bounding-Box und Dreiecksanzahl folgen in Etappe 6.
+3. Geometrie: Einfuegekoordinaten (Placement) immer; wenn die Meshes geladen
+   sind (IfcModel.load_geometry), zusaetzlich Bounding-Box-Schwerpunkt,
+   Abmessungen und Dreiecksanzahl.
 """
 
 import time
@@ -121,13 +122,28 @@ def compare_placement(placement_a: tuple, placement_b: tuple) -> list:
             moved = True
     if not moved:
         return []
-    return [{
-        "source": SOURCE_GEOMETRY,
-        "pset_name": "",
-        "property_name": "Placement",
-        "value_a": placement_a,
-        "value_b": placement_b,
-    }]
+    return [geometry_diff("Placement", placement_a, placement_b)]
+
+
+def compare_geometry(summary_a: dict, summary_b: dict) -> list:
+    """Vergleicht Bounding-Box-Kennwerte; leer, wenn eine Seite keine Geometrie hat."""
+    if not summary_a or not summary_b:
+        return []
+    diffs = []
+    for key in ["center", "size"]:
+        for coord_a, coord_b in zip(summary_a[key], summary_b[key]):
+            if abs(coord_a - coord_b) > LENGTH_TOLERANCE:
+                diffs.append(geometry_diff(key, summary_a[key], summary_b[key]))
+                break
+    if summary_a["n_triangles"] != summary_b["n_triangles"]:
+        diffs.append(geometry_diff("n_triangles", summary_a["n_triangles"], summary_b["n_triangles"]))
+    return diffs
+
+
+def geometry_diff(name: str, value_a, value_b) -> dict:
+    """Eintrag fuer eine Geometrieaenderung."""
+    return {"source": SOURCE_GEOMETRY, "pset_name": "", "property_name": name,
+            "value_a": value_a, "value_b": value_b}
 
 
 def compare_element(model_a: IfcModel, model_b: IfcModel, guid: str) -> ElementChange:
@@ -136,6 +152,7 @@ def compare_element(model_a: IfcModel, model_b: IfcModel, guid: str) -> ElementC
     diffs += compare_dicts(model_a.get_attributes(guid), model_b.get_attributes(guid), SOURCE_ATTRIBUTE)
     diffs += compare_dicts(model_a.get_psets(guid), model_b.get_psets(guid), SOURCE_PSET)
     diffs += compare_placement(model_a.get_placement(guid), model_b.get_placement(guid))
+    diffs += compare_geometry(model_a.get_geometry_summary(guid), model_b.get_geometry_summary(guid))
 
     change_type = MODIFIED if diffs else UNCHANGED
     # Beschreibende Infos immer aus dem neuen Stand B

@@ -6,6 +6,7 @@ import ifcopenshell
 import ifcopenshell.util.element
 
 from src.config import COMPARED_ATTRIBUTES, EXCLUDED_ATTRIBUTES
+from src.geometry import load_meshes, mesh_summary
 
 
 class IfcModel:
@@ -24,6 +25,9 @@ class IfcModel:
         self.elements = {}
         for product in self.file.by_type("IfcProduct"):
             self.elements[product.GlobalId] = product
+        # Meshes werden erst auf Wunsch geladen (load_geometry), weil das
+        # bei grossen Modellen dauert und fuer den Attributvergleich nicht noetig ist
+        self.meshes = {}
 
     def __len__(self) -> int:
         """Anzahl Elemente im Modell."""
@@ -85,3 +89,15 @@ class IfcModel:
             "name": element.Name or "",
             "storey": self.get_storey(guid),
         }
+
+    def load_geometry(self) -> int:
+        """Laedt alle Meshes (aus Cache oder neu) und gibt deren Anzahl zurueck."""
+        self.meshes = load_meshes(self.path, self.file)
+        return len(self.meshes)
+
+    def get_geometry_summary(self, guid: str) -> dict:
+        """Bounding-Box-Kennwerte eines Elements oder leeres Dict ohne Geometrie."""
+        mesh = self.meshes.get(guid)
+        if mesh is None:
+            return {}
+        return mesh_summary(mesh)

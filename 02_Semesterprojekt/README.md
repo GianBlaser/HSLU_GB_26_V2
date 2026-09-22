@@ -165,3 +165,14 @@ Browser, Git-Tag `v1.0-abgabefaehig`.
 `docs/ZP1/` enthaelt die Praesentation fuer die Zwischenpraesentation 1
 (PPTX + PDF, 10 Folien in ausfuehrlicher Form) und die Sprechnotizen fuer die
 3-Minuten-Kurzpraesentation.
+
+### Etappe 6 - Geometrie und Cache (22.09.2026)
+
+`src/geometry.py` erzeugt mit `ifcopenshell.geom.iterator` (mehrere Threads,
+Weltkoordinaten, Meter) die Meshes aller Elemente und legt sie als
+`cache/<sha1>.npz` ab; `IfcModel.load_geometry()` nutzt den Cache automatisch.
+Die Diff-Engine vergleicht damit zusaetzlich Bounding-Box-Schwerpunkt,
+Abmessungen (Toleranz 1 mm) und Dreiecksanzahl. In der App ist "Geometrie
+vergleichen" ein Haekchen. Abnahme mit `Infra-Landscaping.ifc` (2.3 MB,
+101 Meshes): 0.88 s ohne, 0.03 s mit Cache. 26 Tests gruen. Befund: GUIDs
+koennen auf `_` enden, deshalb `|` als Trennzeichen in den npz-Schluesseln.
