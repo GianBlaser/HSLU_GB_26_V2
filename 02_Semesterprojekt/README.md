@@ -192,3 +192,13 @@ Kopplung an die Tabellenfilter. 31 Tests gruen.
 Befund: `ifcopenshell.api root.copy_class` uebernimmt die `Representation`
 nicht - der Testdaten-Generator teilt sie deshalb explizit mit dem Original,
 Testdaten neu erzeugt.
+
+### Etappe 8 - Interaktion und Report (22.09.2026)
+
+Zeilen-Klick in der Tabelle richtet die Kamera der 3D-Ansicht auf das Element
+(`focus_guid` in `viewer.py`; Elemente ohne Geometrie fallen auf die Uebersicht
+zurueck). `src/report.py` schreibt mit `matplotlib PdfPages` einen PDF-Report:
+Titelseite mit Kennzahlen, drei Diagramme, 3D-Bild, Tabelle der Aenderungen
+seitenweise - Button "PDF-Report erzeugen" im Tab 3D-Ansicht. 35 Tests gruen.
+
+![Report](docs/screenshots/report_uebersicht.png)

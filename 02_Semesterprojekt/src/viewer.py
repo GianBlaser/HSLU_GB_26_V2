@@ -61,8 +61,12 @@ def add_group(plotter: pv.Plotter, meshes: list, change_type: str, context_mode:
 
 
 def build_plotter(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
-                  guids: set, context_mode: str) -> pv.Plotter:
-    """Stellt die Szene zusammen: Farben, Kontext, Legende, isometrische Kamera."""
+                  guids: set, context_mode: str, focus_guid: str = "") -> pv.Plotter:
+    """Stellt die Szene zusammen: Farben, Kontext, Legende, isometrische Kamera.
+
+    focus_guid: Kamera auf dieses eine Element statt auf alle Aenderungen
+    (Zeilen-Klick in der Tabelle, Etappe 8).
+    """
     plotter = pv.Plotter(off_screen=True, window_size=list(VIEWER_SIZE))
     plotter.set_background(VIEWER_BACKGROUND)
     grouped = collect_meshes(result, model_a, model_b, guids)
@@ -71,9 +75,23 @@ def build_plotter(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
         add_group(plotter, grouped[kind], kind, context_mode)
     plotter.add_legend(bcolor=None, face=None, size=(0.18, 0.16))
     plotter.view_isometric()
-    focus_on_changes(plotter, grouped)
+    focus_mesh = find_mesh(model_a, model_b, focus_guid)
+    if focus_mesh is not None:
+        focus_camera(plotter, [focus_mesh])
+    else:
+        focus_on_changes(plotter, grouped)
     plotter.add_axes()
     return plotter
+
+
+def find_mesh(model_a: IfcModel, model_b: IfcModel, guid: str):
+    """Mesh eines Elements: zuerst aus B, sonst aus A (geloescht); None ohne Geometrie."""
+    if not guid:
+        return None
+    mesh = model_b.meshes.get(guid) or model_a.meshes.get(guid)
+    if mesh is None:
+        return None
+    return make_polydata(mesh)
 
 
 def focus_on_changes(plotter: pv.Plotter, grouped: dict) -> None:
@@ -83,9 +101,13 @@ def focus_on_changes(plotter: pv.Plotter, grouped: dict) -> None:
     punkt) den Bildausschnitt und die Aenderungen sind winzig.
     """
     changed = grouped[ADDED] + grouped[DELETED] + grouped[MODIFIED]
-    if not changed:
-        return
-    bounds = np.array([mesh.bounds for mesh in changed])
+    if changed:
+        focus_camera(plotter, changed)
+
+
+def focus_camera(plotter: pv.Plotter, meshes: list) -> None:
+    """Kamera isometrisch auf die gemeinsame Bounding-Box der Meshes richten."""
+    bounds = np.array([mesh.bounds for mesh in meshes])
     low = bounds[:, [0, 2, 4]].min(axis=0)
     high = bounds[:, [1, 3, 5]].max(axis=0)
     center = (low + high) / 2
@@ -98,9 +120,9 @@ def focus_on_changes(plotter: pv.Plotter, grouped: dict) -> None:
 
 
 def render_image(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
-                 guids: set, context_mode: str) -> np.ndarray:
+                 guids: set, context_mode: str, focus_guid: str = "") -> np.ndarray:
     """Rendert die Szene und gibt das Bild als RGB-Array zurueck."""
-    plotter = build_plotter(result, model_a, model_b, guids, context_mode)
+    plotter = build_plotter(result, model_a, model_b, guids, context_mode, focus_guid)
     image = plotter.screenshot(return_img=True)
     plotter.close()
     return image

@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 7 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 8 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -598,10 +598,13 @@ Optional: Screencast.
   Testdaten B neu erzeugt (neue GUIDs in ground_truth.json).
   Hinweis: nach Aenderungen in src/ Streamlit neu starten (kein Hot-Reload).
 
+- **Etappe 8**: `viewer.py` focus_guid/find_mesh/focus_camera (Zeilen-Klick ->
+  Kamera), `src/report.py` (title_page, chart_pages, image_page, table_pages,
+  write_report; PdfPages, A4), Button in app.py, `tests/test_report.py`
+  (pymupdf nur im Test). 35 Tests gruen.
+
 ### Naechster Schritt
 
-**Etappe 8 - Interaktion + Report** (optional, Kap. 12): Zeilen-Klick in der
-Tabelle -> Kamera auf das Element (Viewer mit nur diesem Mesh + Kontext),
-`src/report.py` (PDF mit KPIs, Diagrammen, Tabelle; matplotlib PdfPages,
-kein neues Modul). Danach **Etappe 9 - Doku + Praesentation** (README final,
-Architekturdiagramm, Screenshots, ZP2-Folien via docs/ZP1/build/build_slides.js).
+**Etappe 9 - Doku + Praesentation**: README final (Installation, Nutzung,
+Screenshots, Architekturdiagramm, Abgrenzungen, Tests), Code aufraeumen,
+Docstrings pruefen, MEP-Praesentation (10-15 Min) via docs/ZP1/build.
