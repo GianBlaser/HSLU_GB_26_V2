@@ -7,7 +7,7 @@
 **Altes Repo:** HSLU_GB_26 bleibt unveraendert auf GitHub (nur Uebungen)
 **Lokal:** `C:\HSLU_Programming\HSLU_GB_26`
 **Kontext gemaess Merkblatt:** Datenauswertung + Daten-Visualisierung (Dashboard)
-**Stand:** 2026-09-21 (SW2) - Etappen 0 bis 8 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
+**Stand:** 2026-09-21 (SW2) - alle Etappen 0 bis 9 abgeschlossen (v1.0-abgabefaehig = E5), siehe Kap. 15
 
 > Arbeitsanweisung fuer Claude Code. Etappenweise abarbeiten, nach jeder Etappe
 > Tests, Commit, Ruecksprache. Abgeglichen mit Merkblatt Leistungsnachweis HS26,
@@ -603,8 +603,19 @@ Optional: Screencast.
   write_report; PdfPages, A4), Button in app.py, `tests/test_report.py`
   (pymupdf nur im Test). 35 Tests gruen.
 
-### Naechster Schritt
+- **Etappe 9**: README final (11 Kapitel: Problem, Installation, Nutzung,
+  Architektur, Kernlogik, Abgrenzungen, Tests, Werkzeuge, Screenshots,
+  Verlauf, Abgaben), `tools/make_architecture_diagram.py` (docs/architektur.png),
+  App-Screenshot (Edge headless mit ?demo=1), smoke_test.py nach tools/,
+  Code-Durchsicht: alle Funktionen <= 30 Zeilen, <= 4 Parameter, Docstring
+  (viewer.render_image/build_plotter entsprechend umgebaut).
+  MEP-Praesentation `docs/MEP/` (12 Folien + Sprechnotizen + Generator).
 
-**Etappe 9 - Doku + Praesentation**: README final (Installation, Nutzung,
-Screenshots, Architekturdiagramm, Abgrenzungen, Tests), Code aufraeumen,
-Docstrings pruefen, MEP-Praesentation (10-15 Min) via docs/ZP1/build.
+### Offen bis zur Abgabe
+
+- ZP1 am 26.10.: Folien ueber ILIAS abgeben, PyVista-Frage stellen.
+- ZP2 am 14.12.: Folien aus `docs/MEP/build_slides_mep.js` ableiten.
+- MEP: Dokumentation bis 23.01. ueber ILIAS inkl. Repository-Link,
+  Praesentation am 27.01. in Horw. Vorher pruefen: Repository public.
+- Optional: Screencast, interaktiver Viewer (stpyvista), Regelpruefung
+  mit Schwellenwerten.

@@ -27,7 +27,7 @@ from src.database import connect, load_history, save_result  # noqa: E402
 from src.diff_engine import DiffResult, compare_models  # noqa: E402
 from src.ifc_loader import IfcModel  # noqa: E402
 from src.report import write_report  # noqa: E402
-from src.viewer import render_image  # noqa: E402
+from src.viewer import collect_meshes, find_mesh, render_image  # noqa: E402
 
 UPLOAD_DIR = OUTPUT_DIR / "uploads"
 ALL = "(alle)"
@@ -169,7 +169,8 @@ def show_viewer(result: DiffResult, filtered: pd.DataFrame, selected_guid: str) 
     cached = st.session_state.get("render")
     if cached is None or cached[0] != key:
         with st.spinner("Rendern ..."):
-            image = render_image(result, models[0], models[1], guids, context_mode, focus_guid)
+            grouped = collect_meshes(result, models, guids)
+            image = render_image(grouped, context_mode, find_mesh(models, focus_guid))
         st.session_state["render"] = (key, image)
     right.image(st.session_state["render"][1], use_container_width=True)
     left.caption("DELETED aus Stand A, alle anderen aus Stand B. Ansicht isometrisch auf die Aenderungen.")
@@ -206,7 +207,10 @@ def main() -> None:
 
     with_geometry = st.checkbox("Geometrie vergleichen (Bounding-Box, Dreiecksanzahl) - erster Lauf dauert laenger",
                                 value=True)
-    if st.button("Vergleichen", type="primary"):
+    # Demo-Link (http://localhost:8501/?demo=1): Vergleich der Standarddateien
+    # sofort ausfuehren - fuer Vorfuehrung und Screenshots
+    demo_requested = st.query_params.get("demo") == "1" and "result" not in st.session_state
+    if st.button("Vergleichen", type="primary") or demo_requested:
         run_comparison(path_a, path_b, with_geometry)
 
     result = st.session_state.get("result")
@@ -214,7 +218,11 @@ def main() -> None:
         st.info("Zwei Dateien waehlen und auf Vergleichen klicken.")
         return
 
-    comparison_id = st.session_state["comparison_id"]
+    show_result(result, st.session_state["comparison_id"])
+
+
+def show_result(result: DiffResult, comparison_id: int) -> None:
+    """Kopfzeile, Kennzahlen und die vier Tabs eines Vergleichs."""
     st.success(f"{result.file_a}  ->  {result.file_b}   |   Vergleich #{comparison_id} gespeichert "
                f"({result.duration_s:.2f} s)")
     if result.schema_differs():

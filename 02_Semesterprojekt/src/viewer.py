@@ -29,12 +29,13 @@ def make_polydata(mesh: dict) -> pv.PolyData:
     return pv.PolyData(mesh["verts"], np.hstack([counts, faces]).ravel())
 
 
-def collect_meshes(result: DiffResult, model_a: IfcModel, model_b: IfcModel, guids: set) -> dict:
+def collect_meshes(result: DiffResult, models: tuple, guids: set) -> dict:
     """Sammelt je Aenderungsart die Meshes der gewuenschten Elemente.
 
-    DELETED aus Modell A, alles andere aus Modell B. Elemente ohne Geometrie
-    werden einzeln uebersprungen.
+    models: (Modell A, Modell B). DELETED kommt aus A, alles andere aus B.
+    Elemente ohne Geometrie werden einzeln uebersprungen.
     """
+    model_a, model_b = models
     grouped = {kind: [] for kind in [ADDED, DELETED, MODIFIED, UNCHANGED]}
     for change in result.changes:
         if change.global_id not in guids:
@@ -60,22 +61,20 @@ def add_group(plotter: pv.Plotter, meshes: list, change_type: str, context_mode:
                      label=LEGEND_LABELS[change_type])
 
 
-def build_plotter(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
-                  guids: set, context_mode: str, focus_guid: str = "") -> pv.Plotter:
+def build_plotter(grouped: dict, context_mode: str, focus_mesh=None) -> pv.Plotter:
     """Stellt die Szene zusammen: Farben, Kontext, Legende, isometrische Kamera.
 
-    focus_guid: Kamera auf dieses eine Element statt auf alle Aenderungen
-    (Zeilen-Klick in der Tabelle, Etappe 8).
+    grouped: Meshes je Aenderungsart aus collect_meshes().
+    focus_mesh: Kamera auf dieses eine Mesh statt auf alle Aenderungen
+    (Zeilen-Klick in der Tabelle).
     """
     plotter = pv.Plotter(off_screen=True, window_size=list(VIEWER_SIZE))
     plotter.set_background(VIEWER_BACKGROUND)
-    grouped = collect_meshes(result, model_a, model_b, guids)
     # Kontext zuerst, damit die farbigen Elemente darueber liegen
     for kind in [UNCHANGED, ADDED, DELETED, MODIFIED]:
         add_group(plotter, grouped[kind], kind, context_mode)
     plotter.add_legend(bcolor=None, face=None, size=(0.18, 0.16))
     plotter.view_isometric()
-    focus_mesh = find_mesh(model_a, model_b, focus_guid)
     if focus_mesh is not None:
         focus_camera(plotter, [focus_mesh])
     else:
@@ -84,8 +83,9 @@ def build_plotter(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
     return plotter
 
 
-def find_mesh(model_a: IfcModel, model_b: IfcModel, guid: str):
+def find_mesh(models: tuple, guid: str):
     """Mesh eines Elements: zuerst aus B, sonst aus A (geloescht); None ohne Geometrie."""
+    model_a, model_b = models
     if not guid:
         return None
     mesh = model_b.meshes.get(guid) or model_a.meshes.get(guid)
@@ -119,10 +119,9 @@ def focus_camera(plotter: pv.Plotter, meshes: list) -> None:
     plotter.camera.up = (0, 0, 1)
 
 
-def render_image(result: DiffResult, model_a: IfcModel, model_b: IfcModel,
-                 guids: set, context_mode: str, focus_guid: str = "") -> np.ndarray:
-    """Rendert die Szene und gibt das Bild als RGB-Array zurueck."""
-    plotter = build_plotter(result, model_a, model_b, guids, context_mode, focus_guid)
+def render_image(grouped: dict, context_mode: str, focus_mesh=None) -> np.ndarray:
+    """Rendert die Szene aus collect_meshes() und gibt das Bild als RGB-Array zurueck."""
+    plotter = build_plotter(grouped, context_mode, focus_mesh)
     image = plotter.screenshot(return_img=True)
     plotter.close()
     return image

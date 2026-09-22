@@ -8,7 +8,7 @@ from src.config import CONTEXT_TRANSPARENT, DATA_DIR
 from src.diff_engine import compare_models
 from src.ifc_loader import IfcModel
 from src.report import write_report
-from src.viewer import build_plotter
+from src.viewer import build_plotter, collect_meshes, find_mesh
 
 FILE_A = DATA_DIR / "Building-Architecture.ifc"
 FILE_B = DATA_DIR / "Building-Architecture_B.ifc"
@@ -52,8 +52,9 @@ def test_focus_moves_camera(scene):
     result, model_a, model_b = scene
     guids = {c.global_id for c in result.changes}
     wall = "0OfZwWc8j9QP5uX8xPTxDH"
-    overview = build_plotter(result, model_a, model_b, guids, CONTEXT_TRANSPARENT)
-    focused = build_plotter(result, model_a, model_b, guids, CONTEXT_TRANSPARENT, focus_guid=wall)
+    grouped = collect_meshes(result, (model_a, model_b), guids)
+    overview = build_plotter(grouped, CONTEXT_TRANSPARENT)
+    focused = build_plotter(grouped, CONTEXT_TRANSPARENT, find_mesh((model_a, model_b), wall))
     bounds = np.array(model_b.meshes[wall]["verts"])
     center = (bounds.min(axis=0) + bounds.max(axis=0)) / 2
     assert np.allclose(focused.camera.focal_point, center, atol=1e-3)
@@ -66,8 +67,10 @@ def test_focus_without_geometry_falls_back(scene):
     """Element ohne Mesh (Kamin): Kamera wie in der Uebersicht."""
     result, model_a, model_b = scene
     guids = {c.global_id for c in result.changes}
-    overview = build_plotter(result, model_a, model_b, guids, CONTEXT_TRANSPARENT)
-    focused = build_plotter(result, model_a, model_b, guids, CONTEXT_TRANSPARENT, focus_guid="3Fbgsvr8nAYfGs9y5keub0")
+    grouped = collect_meshes(result, (model_a, model_b), guids)
+    overview = build_plotter(grouped, CONTEXT_TRANSPARENT)
+    focused = build_plotter(grouped, CONTEXT_TRANSPARENT,
+                            find_mesh((model_a, model_b), "3Fbgsvr8nAYfGs9y5keub0"))
     assert np.allclose(overview.camera.focal_point, focused.camera.focal_point)
     overview.close()
     focused.close()

@@ -1,12 +1,18 @@
 """Smoke-Test Etappe 0: IFC oeffnen und Grunddaten ausgeben.
 
 Aufruf aus dem Repo-Root mit aktivierter venv:
-    python 02_Semesterprojekt/smoke_test.py
+    python 02_Semesterprojekt/tools/smoke_test.py
 """
+
+import sys
+from pathlib import Path
 
 import ifcopenshell
 
-from src.config import DATA_DIR
+# Projektordner importierbar machen (das Skript liegt in tools/)
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from src.config import DATA_DIR  # noqa: E402
 
 
 def main():

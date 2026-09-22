@@ -35,7 +35,7 @@ def test_collect_meshes_groups(scene):
     """Jede Aenderungsart mit Geometrie hat Meshes; DELETED kommt aus Modell A."""
     result, model_a, model_b = scene
     guids = {c.global_id for c in result.changes}
-    grouped = collect_meshes(result, model_a, model_b, guids)
+    grouped = collect_meshes(result, (model_a, model_b), guids)
     assert len(grouped[ADDED]) == 2
     assert len(grouped[DELETED]) >= 1
     assert len(grouped[MODIFIED]) >= 1
@@ -47,7 +47,7 @@ def test_collect_meshes_groups(scene):
 def test_collect_meshes_respects_filter(scene):
     """Ein leerer Filter liefert keine Meshes."""
     result, model_a, model_b = scene
-    grouped = collect_meshes(result, model_a, model_b, set())
+    grouped = collect_meshes(result, (model_a, model_b), set())
     assert all(len(v) == 0 for v in grouped.values())
 
 
@@ -55,7 +55,8 @@ def test_render_image_size_and_content(scene):
     """Das Bild hat die konfigurierte Groesse und ist nicht leer."""
     result, model_a, model_b = scene
     guids = {c.global_id for c in result.changes}
-    image = render_image(result, model_a, model_b, guids, CONTEXT_TRANSPARENT)
+    grouped = collect_meshes(result, (model_a, model_b), guids)
+    image = render_image(grouped, CONTEXT_TRANSPARENT)
     assert image.shape == (VIEWER_SIZE[1], VIEWER_SIZE[0], 3)
     assert image.std() > 0   # nicht einfarbig
 
@@ -64,8 +65,9 @@ def test_context_off_renders_fewer_pixels(scene):
     """Ohne Kontext ist weniger gezeichnet als mit transparentem Kontext."""
     result, model_a, model_b = scene
     guids = {c.global_id for c in result.changes}
-    with_context = render_image(result, model_a, model_b, guids, CONTEXT_TRANSPARENT)
-    without = render_image(result, model_a, model_b, guids, CONTEXT_OFF)
+    grouped = collect_meshes(result, (model_a, model_b), guids)
+    with_context = render_image(grouped, CONTEXT_TRANSPARENT)
+    without = render_image(grouped, CONTEXT_OFF)
     background = np.array([255, 255, 255])
     drawn_with = (with_context != background).any(axis=2).sum()
     drawn_without = (without != background).any(axis=2).sum()
